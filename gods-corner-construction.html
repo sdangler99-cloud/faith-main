@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>God's Corner - Under Construction</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Georgia', serif;
+    overflow: hidden;
+    background: linear-gradient(180deg, #1a1408 0%, #2b1f0f 40%, #3d2b12 100%);
+    position: relative;
+  }
+
+  /* Diagonal caution stripes background */
+  .stripes {
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      45deg,
+      #f5b921,
+      #f5b921 40px,
+      #1a1408 40px,
+      #1a1408 80px
+    );
+    opacity: 0.12;
+    z-index: 0;
+  }
+
+  /* soft warm glow like stained glass light */
+  .glow {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 50% 30%, rgba(255,215,120,0.25), transparent 60%);
+    z-index: 1;
+  }
+
+  .card {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: 50px 40px;
+    max-width: 480px;
+    background: rgba(20, 15, 8, 0.75);
+    border: 3px solid #f5b921;
+    border-radius: 16px;
+    box-shadow: 0 0 40px rgba(245, 185, 33, 0.35), inset 0 0 20px rgba(245,185,33,0.1);
+  }
+
+  .cross {
+    font-size: 44px;
+    color: #f5b921;
+    margin-bottom: 10px;
+    text-shadow: 0 0 15px rgba(245,185,33,0.8);
+  }
+
+  h1 {
+    color: #f8e6b0;
+    font-size: 28px;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+    text-shadow: 0 2px 6px rgba(0,0,0,0.6);
+  }
+
+  .tape {
+    display: inline-block;
+    background: repeating-linear-gradient(
+      45deg,
+      #f5b921,
+      #f5b921 12px,
+      #1a1408 12px,
+      #1a1408 24px
+    );
+    color: #1a1408;
+    font-weight: bold;
+    font-size: 13px;
+    letter-spacing: 2px;
+    padding: 6px 18px;
+    margin: 16px 0;
+    border-radius: 3px;
+    text-transform: uppercase;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+  }
+
+  p {
+    color: #d8c7a0;
+    font-size: 16px;
+    line-height: 1.6;
+    margin-top: 14px;
+  }
+
+  .verse {
+    margin-top: 22px;
+    font-style: italic;
+    color: #f5b921;
+    font-size: 14px;
+    opacity: 0.85;
+  }
+
+  .icons {
+    margin-top: 24px;
+    font-size: 22px;
+    letter-spacing: 14px;
+    opacity: 0.8;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.55; }
+  }
+
+  .cross, .tape {
+    animation: pulse 2.5s ease-in-out infinite;
+  }
+</style>
+</head>
+<body>
+  <div class="stripes"></div>
+  <div class="glow"></div>
+
+  <div class="card">
+    <div class="cross">✝</div>
+    <h1>God's Corner</h1>
+    <div class="tape">Under Construction</div>
+    <p>We're building something meaningful.<br>More great things to come.</p>
+    <div class="icons">🔨 🙏 🚧</div>
+    <div class="verse">"Be still, and know that I am God." — Psalm 46:10</div>
+  </div>
+</body>
+</html>
