@@ -1,7 +1,7 @@
 {
   "name": "God's Corner",
   "short_name": "God's Corner",
-  "start_url": "./Stevescheckin.html",
+  "start_url": "./index.html"
   "display": "standalone",
   "background_color": "#0a1428",
   "theme_color": "#0a1428",
