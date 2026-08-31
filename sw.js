@@ -44,11 +44,13 @@ self.addEventListener('fetch', (event) => {
 
 const REMINDER_TEXT = {
   en: { title: "God's Corner", body: 'Take a quiet moment today. Your verse is waiting.' },
-  es: { title: 'El Rincón de Dios', body: 'Tómate un momento tranquilo hoy. Tu versículo te espera.' }
+  es: { title: 'El Rincón de Dios', body: 'Tómate un momento tranquilo hoy. Tu versículo te espera.' },
+  he: { title: 'פינת האלוהים', body: 'קח רגע שקט היום. הפסוק שלך מחכה.' }
 };
 
 function reminderCopy() {
-  const lang = (self.navigator && self.navigator.language || 'en').toLowerCase().startsWith('es') ? 'es' : 'en';
+  const raw = (self.navigator && self.navigator.language || 'en').toLowerCase();
+  const lang = raw.startsWith('es') ? 'es' : raw.startsWith('he') ? 'he' : 'en';
   return REMINDER_TEXT[lang];
 }
 

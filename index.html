@@ -10,7 +10,7 @@
 <meta name="theme-color" content="#0a1428">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Frank+Ruhl+Libre:wght@400;500;600;700&family=Noto+Naskh+Arabic:wght@400;600&display=swap" rel="stylesheet">
 <style>
 :root{
 --navy-deep:#0a1428;
@@ -369,6 +369,35 @@ text-underline-offset:3px;
 cursor:pointer;
 padding:6px 4px;
 }
+.lang-select{
+background:rgba(0,0,0,0.18);
+border:1px solid var(--line);
+color:var(--gold-soft);
+font-family:'EB Garamond', serif;
+font-style:italic;
+font-size:0.95rem;
+padding:6px 12px;
+border-radius:20px;
+cursor:pointer;
+}
+.lang-select:focus{outline:none;border-color:var(--gold);}
+html[dir="rtl"] body{
+font-family:'Frank Ruhl Libre', 'EB Garamond', serif;
+}
+html[dir="rtl"] .prompt,
+html[dir="rtl"] h1{
+font-family:'Frank Ruhl Libre', 'Cormorant Garamond', serif;
+}
+.verse-text.script-rtl,
+.verse-ref.script-rtl{
+direction:rtl;
+}
+.verse-text.script-hebrew{
+font-family:'Frank Ruhl Libre', 'EB Garamond', serif;
+}
+.verse-text.script-arabic{
+font-family:'Noto Naskh Arabic', 'EB Garamond', serif;
+}
 .journal-list{
 margin-top:22px;
 display:flex;
@@ -415,7 +444,8 @@ position:relative;
 background:rgba(0,0,0,0.16);
 border:1px solid var(--line);
 border-radius:10px;
-padding:14px 34px 14px 16px;
+padding-block:14px;
+padding-inline:16px 34px;
 }
 .journal-entry-date{
 color:var(--gold-soft);
@@ -433,7 +463,7 @@ white-space:pre-wrap;
 .journal-delete-btn{
 position:absolute;
 top:10px;
-right:10px;
+inset-inline-end:10px;
 background:none;
 border:none;
 color:var(--muted);
@@ -560,7 +590,8 @@ position:relative;
 background:rgba(0,0,0,0.16);
 border:1px solid var(--line);
 border-radius:10px;
-padding:14px 34px 14px 16px;
+padding-block:14px;
+padding-inline:16px 34px;
 }
 .fav-entry-ref{
 color:var(--gold-soft);
@@ -607,7 +638,7 @@ font-size:0.85rem;
 .fav-remove-btn{
 position:absolute;
 top:10px;
-right:10px;
+inset-inline-end:10px;
 background:none;
 border:none;
 color:var(--muted);
@@ -671,7 +702,11 @@ h1{font-size:2.1rem;}
 <p class="streak-note" id="streakNote"></p>
 
 <div class="journal-nav" style="margin-bottom:16px;">
-<button type="button" id="langToggleBtn">🌐 Español</button>
+<select class="lang-select" id="langSelect" aria-label="Language / Idioma / שפה">
+<option value="en">🌐 English</option>
+<option value="es">🌐 Español</option>
+<option value="he">🌐 עברית</option>
+</select>
 </div>
 
 <div class="version-picker" id="versionPickerWrap">
@@ -953,6 +988,27 @@ const MOOD_ES = {
 "Hopeful / Motivated": "Esperanzado / Motivado"
 };
 
+const MOOD_HE = {
+"Anxious / Worried": "חרד / מודאג",
+"Sad / Down": "עצוב / מדוכא",
+"Angry / Frustrated": "כועס / מתוסכל",
+"Fearful": "מפוחד",
+"Lonely": "בודד",
+"Grateful / Joyful": "אסיר תודה / שמח",
+"Overwhelmed / Stressed": "המום / לחוץ",
+"Guilty / Ashamed": "אשם / מתבייש",
+"Tired / Weary": "עייף / תשוש",
+"Hopeless / Discouraged": "חסר תקווה / מיואש",
+"Grieving": "מתאבל",
+"Confused / Uncertain": "מבולבל / לא בטוח",
+"Tempted / Struggling": "מתפתה / נאבק",
+"Peaceful / Content": "שליו / מרוצה",
+"Doubting / Questioning God": "מטיל ספק / שואל על אלוהים",
+"Hopeful / Motivated": "מלא תקווה / נמרץ"
+};
+
+const MOOD_TRANSLATIONS = { es: MOOD_ES, he: MOOD_HE };
+
 const REFLECTIONS_ES = {
 "Anxious / Worried": [
 "No tienes que cargar esto solo. Entrégalo, y deja que la paz haga guardia.",
@@ -1051,6 +1107,107 @@ const REFLECTIONS_ES = {
 "Hasta las partes difíciles de esto tienen respaldo."
 ]
 };
+
+const REFLECTIONS_HE = {
+"Anxious / Worried": [
+"אינך צריך לשאת בזה לבד. מסור את זה, ותן לשלום לשמור.",
+"בהיום הזה יש כבר די והותר. מבקשים ממך לשאת רק את היום הזה.",
+"הוא לא מבקש ממך להיות חזק עכשיו. הוא מבקש שתמסור לו את זה.",
+"אינך מתמודד עם זה לבד, גם כשזה מרגיש ככה."
+],
+"Sad / Down": [
+"הוא לא רחוק מזה. הוא קרוב יותר כשזה כואב, לא רחוק יותר.",
+"ריפוי הוא תהליך איטי, אבל זו ההתמחות שלו.",
+"אין בושה באבל. הנחמה מובטחת, לא צריך להרוויח אותה.",
+"הלילה הזה אמיתי. וכך גם הבוקר שבדרך."
+],
+"Angry / Frustrated": [
+"הכעס עצמו אינו החטא. מה שאתה עושה איתו הוא מה שחשוב.",
+"האט לפני שאתה פועל. הכעס עוד יהיה שם בעוד רגע — הבהירות אולי לא.",
+"אתה בוחר את הטון, גם כשלא בחרת את המצב.",
+"חוכמה היא לא שתיקה לנצח. זה עניין של תזמון."
+],
+"Fearful": [
+"אומץ אינו העדר פחד. זו התקדמות כשהוא לצידך.",
+"הפחד הזה לא בא ממנו. מה שהוא נותן לך יציב יותר מזה.",
+"מה שלא יעמוד מולך, הוא לא גדול ממנו.",
+"אתה מוחזק, גם בזה."
+],
+"Lonely": [
+"גם בחדר ריק, אינך באמת לבד.",
+"זו לא אולי. זו הבטחה שאפשר להישען עליה בכל הכובד.",
+"הוא מכניס אנשים בודדים אל תוך שייכות. זה כולל גם אותך.",
+"תמיד זה אומר תמיד — כולל הלילה הזה."
+],
+"Grateful / Joyful": [
+"תן לרגע הטוב הזה להיות מורגש, לא רק לחלוף.",
+"הכרת תודה כאן היא לא רק רגש — זו הרגל ששווה לפתח.",
+"מותר לך פשוט ליהנות מהרגע הזה.",
+"היום הזה נחשב. תן לו להיות כזה."
+],
+"Overwhelmed / Stressed": [
+"המנוחה מוצעת, לא צריך להרוויח אותה. מותר לך להניח חלק מזה בצד.",
+"לא נבראת כדי לשאת את כל זה לבד.",
+"אתה לא צריך להיות בכוח מלא כדי שזה עדיין יסתדר.",
+"יש קרקע יציבה מעל לקו השיטפון. בקש שיובילו אותך לשם."
+],
+"Guilty / Ashamed": [
+"הווידוי אינו סוף הסיפור. הסליחה היא הסוף.",
+"האשמה יכולה להצביע לך על שינוי. היא מעולם לא נועדה להגדיר אותך.",
+"זה התרחק יותר משאתה יכול למדוד. תן לזה להישאר רחוק.",
+"שום דבר שאתה נושא אינו מעבר למה שהוא יכול לטהר."
+],
+"Tired / Weary": [
+"המתנה היא לא זמן מבוזבז. כך הכוח נבנה מחדש.",
+"העייפות אמיתית. וכך גם הקציר שעוד יבוא.",
+"מותר לך לעצור ולנוח לפני שתמשיך.",
+"תן לנשמתך לנוח באמת, לא רק לגוף."
+],
+"Hopeless / Discouraged": [
+"התוכנית שלו בשבילך לא נעצרה כשהדברים הקשו.",
+"תקווה היא לא משהו שאתה צריך לייצר. אפשר לקבל אותה כמתנה.",
+"אפילו מחבר התהלים דיבר אל עצמו בחזרה אל התקווה. גם אתה יכול.",
+"מחר הוא חסד חדש, לא חזרה על היום."
+],
+"Grieving": [
+"הוא נשאר קרוב בזה, גם כשכולם האחרים לא יודעים מה להגיד.",
+"לאובדן אין את המילה האחרונה.",
+"לאבל הזה יש סוף. פשוט עוד לא הגענו אליו.",
+"מותר לך להתנחם, לא רק לשרוד."
+],
+"Confused / Uncertain": [
+"אינך צריך את כל המפה. רק את הצעד הבא.",
+"לשאול זו לא חולשה. כך אמור למצוא את דרכך.",
+"הדרכה מגיעה לרוב בשקט, צעד אחר צעד.",
+"משגיחים עליך, לא משאירים אותך להבין הכל לבד."
+],
+"Tempted / Struggling": [
+"יש דרך לעבור את הרגע הספציפי הזה. חפש אותה.",
+"אתה לא נלחם בזה לגמרי בכוחות עצמך.",
+"הוא מבין את המשיכה הזו. הבא לו את זה במקום להסתיר.",
+"צעד כן אחד בכיוון הנכון משנה את כל הרגע."
+],
+"Peaceful / Content": [
+"שביעות רצון אינה תלויה בנסיבות. זה משהו שאפשר לשאת איתך.",
+"השלום הזה אינו שביר כמו זה של העולם. תן לו להשתקע.",
+"תן לרגע השקט הזה באמת להשיב את נפשך.",
+"שלום צומח היכן שתשומת ליבך נחה."
+],
+"Doubting / Questioning God": [
+"אמונה כאן היא לא העמדת פנים שהכל בסדר. זה לבטוח בו גם כשזה לא.",
+"איוב שאל שאלות קשות ובכל זאת נשאר קרוב לאלוהים. מותר לך לעשות את שניהם.",
+"התהלים מלאים בתלונות כנות ואחריהן אמון מחודש. זו לא סתירה — זו אמונה אמיתית.",
+"לא כל חלק נראה טוב כרגע. התמונה השלמה עדיין נכתבת."
+],
+"Hopeful / Motivated": [
+"מה שלא תהיה בונה לקראתו, הוא כבר חשב על זה מראש.",
+"הכוח הזה זמין בדיוק למה שעומד לפניך היום.",
+"אינך בונה את זה לבד או נגד כל הסיכויים.",
+"גם החלקים הקשים בזה מגובים."
+]
+};
+
+const REFLECTIONS_BY_LANG = { es: REFLECTIONS_ES, he: REFLECTIONS_HE };
 
 const STORIES = {
 en: {
@@ -1184,6 +1341,72 @@ body: "Uno de los doce no estaba en el cuarto la primera vez que los otros viero
 title: "El Niño Con Cinco Panes",
 body: "Una multitud enorme se había reunido ya tarde en el día, con hambre, sin nada más que unas sobras entre todos — cinco panes y dos pescaditos, traídos por un niño que probablemente no pensó que fueran a importar mucho frente a tanta gente. No era suficiente. Cualquiera que hiciera el cálculo lo veía de inmediato.\n\nLo dio de todos modos. Lo entregó para que fuera bendecido, partido y repartido — y de alguna manera alimentó a miles, con canastas de sobras además. El cálculo nunca cambió. Lo que cambió fue lo que se hizo con esa cosa pequeña e insuficiente que en realidad se ofreció, en vez de guardarla porque parecía demasiado pequeña para importar.\n\nDe eso suelen vivir realmente la esperanza y la motivación — no de una garantía de que lo que traes es suficiente por sí solo, sino de la disposición a entregarlo y ver en qué se convierte en manos mejores de lo que tu propio cálculo predeciría.\n\nSea lo que sea que estés construyendo, probablemente ahora mismo se ve como cinco panes frente a una multitud hambrienta. Tráelo de todos modos. Multiplicar nunca fue realmente tu trabajo."
 }
+},
+he: {
+"Anxious / Worried": {
+title: "המשא שהוא מעולם לא ביקש שתישא",
+body: "יש סוג מסוים של עייפות שבא מלעצור את הנשימה כל היום מבלי לשים לב שאתה עושה את זה. כתפיים מורמות עד לאוזניים. לסת מהודקת. חוזר שוב ושוב על אותן שלוש דאגות במעגל, כמו מישהו שבודק שוב מנעול שכבר בדק.\n\nאיש בסיפור עתיק עמד פעם בשדה, מביט בציפורים שלא זרעו, לא קצרו, לא אגרו דבר — ובכל זאת אכלו בכל יום. הוא לא היה תמים. הוא ידע שגם הציפורים מתמודדות עם נצים וחורפים קשים. זו לא הייתה הנקודה. הנקודה הייתה שדאגה מעולם לא הוסיפה ולו יום אחד לחייו של איש. היא רק הכבידה על הימים שכבר היו לו.\n\nמותר לך לתכנן. חוכמה איננה האויב כאן. אבל יש הבדל בין הכנה למחר לבין ניסיון להחזיק את המחר בשתי ידיך הלילה. האחד הוא ניהול אחראי. השני מתיש, ומעולם לא היה שלך לעשות.\n\nהנח את זה הלילה — לא כי הדאגה אינה אמיתית, אלא כי היא מעולם לא נועדה שתישא אותה לבד."
+},
+"Sad / Down": {
+title: "אלה שממתינים איתך",
+body: "יש בדידות מוזרה בעצב — לא כי אין איש בסביבה, אלא כי מרגיש שאיש לא באמת יכול להגיע למקום שבו אתה נמצא. כאילו לאבל יש חדר משלו, וגם אנשים שאוהבים אותך נאלצים לעמוד מחוץ לדלת.\n\nאיש אחד בכה פעם ליד קברו של חבר, אף שכבר ידע — ידע בוודאות — שהוא עומד להקימו לתחייה. הוא לא העמיד פני אבל בשביל הקהל. הוא בכה כי אובדן הוא עדיין אובדן, גם כשאתה עומד צעד אחד מהנס. הדמעות לא היו כשל באמונה. הן היו הוכחה לאהבה.\n\nשווה לשבת עם זה. אינך צריך להסביר את עצבך או למהר לצאת ממנו כדי להוכיח שאתה חזק או מאמין מספיק. לפעמים הדבר האנושי ביותר — והקדוש ביותר — הוא פשוט לתת לדמעות לבוא, ולתת למישהו לעמוד בחדר איתך בזמן שזה קורה.\n\nלא תישאר בחדר הזה לנצח. אבל אין רע בכך שאתה עדיין בו הלילה."
+},
+"Angry / Frustrated": {
+title: "האש שלא חייבת לשרוף אותך",
+body: "נוהגים להתייחס לכעס כאל פגם באופי, משהו שצריך לבלוע ולעבור הלאה בחיוך. אבל יש סיפור עתיק על איש שנכנס למקדש, ראה אנשים הופכים משהו קדוש לשוק, והפך את השולחנות. הוא לא היה יוצא משליטה. הוא היה צלול, זועם, ובעל צדק.\n\nהכעס עצמו מעולם לא היה הבעיה. מה שחשוב הוא לאן הוא מכוון, ומה אתה עושה בידיים שלך בזמן שהוא בוער.\n\nרוב הכעס אינו כה צודק — רובו הוא סתם יום שלישי רגיל, מישהו שחתך אותך בכביש, הערה שנפלה לא נכון, יום שהתיש אותך עד הסוף. גם זה בסדר. זה לא הופך אותך לאדם רע. זה הופך אותך למישהו שאכפת לו ממשהו — הוגנות, כבוד, להישמע — מספיק שזה כואב כשזה חסר.\n\nהשאלה האמיתית היחידה היא מה קורה אחר כך. האם האש תשמש לשרוף משהו, או להאיר משהו. אתה בוחר את זה, גם אם לא בחרת את הניצוץ."
+},
+"Fearful": {
+title: "אומץ הוא לא היעדר החושך",
+body: "אף אחד לא אומר למי שמפחד סתם להפסיק לפחד — לא אם באמת עמד בעצמו בתוך החושך. לפחד לא אכפת כמה הגיוני הפחד שלך. הוא מופיע בכל זאת.\n\nיש ציווי עתיק שניתן לאיש שעמד להיכנס לשטח זר ומסוכן, כשעם שלם תלוי בו: חזק ואמץ. לא ״אל תפחד.״ לא ״לא תרגיש את זה.״ רק — היה חזק בכל זאת, היה אמיץ בכל זאת, כי אינך נכנס לזה לבד.\n\nזה כל השינוי, למעשה. אומץ מעולם לא היה קשור להיעלמות הפחד. הוא קשור למי שעומד לצידך בזמן שהוא עדיין שם. החושך לא נהיה קטן יותר. אתה פשוט מפסיק להיות היחיד בתוכו.\n\nמה שלא יעמוד לפניך הלילה, הוא לא חייב להרגיש קטן יותר כדי שתעשה את הצעד הבא. הוא רק צריך להרגיש פחות בודד."
+},
+"Lonely": {
+title: "חדר שנבנה ליותר מאחד",
+body: "יש כאב מסוים בחדר ריק — לא רק השקט, אלא התחושה שאף אחד לא בא, שכל מה שאתה נושא, אתה נושא ללא עדים.\n\nהבטחה עתיקה ניתנה לעם שעמד להיכנס אל הלא נודע: הוא לא ירפה ממך ולא יעזבך. לא ״לא תרגיש בודד.״ רק — גם בתוך התחושה הזו, היא בעצם לא נכונה. החדר מאוכלס יותר משהוא נראה.\n\nזה לא מוחק את הכמיהה לאנשים אחרים, לקול, למישהו שיודע את שמך ואומר אותו בקול. הבדידות אמיתית, והיא ראויה ליותר מקלישאה רוחנית שזורקים עליה. אבל עוזר לדעת שהריקנות בחדר איננה כל האמת של החדר. משהו נמצא שם, גם בלילות שהכי קשה להרגיש בו.\n\nמותר לך לרצות יותר מהנוכחות הזו — לרצות גם אנשים. אבל אינך כה חסר ליווי כמו שזה מרגיש הלילה."
+},
+"Grateful / Joyful": {
+title: "המשמעת של להבחין",
+body: "יש סיפור על עשרה אנשים שנרפאו מאותה מחלה באותו יום, והלכו עם אותו נס בידיהם. רק אחד חזר — הסתובב באמצע הדרך, נפל והודה, בקול, מול כולם. תשעה המשיכו ללכת לקראת מה שיבוא. רק אחד נתן לרגע הטוב באמת לנחות.\n\nשווה לשים לב לזה, כי הכרת תודה היא לא באמת על כך שקורים דברים טובים. להרבה אנשים קורים דברים טובים ואף פעם לא מסתובבים. זה על לעצור מספיק זמן כדי לתת לרגע להיות רגע, במקום רק דלק לדבר הבא שאתה רודף אחריו.\n\nהתחושה הזו שיש לך עכשיו — הקלה, הפשוטה — היא לא תשאל פעמיים. היא לא משתהה בפתח מחכה שתדביק את הקצב. אם לא תסתובב עכשיו, היא תיהפך סתם ליום שלישי, עוד יום בין רבים, במקום היום שהוא באמת היה.\n\nאז תסתובב. אמור זאת בקול אם אתה יכול. תן להיום להיות שווה יותר מסימון וי בדרך למחר."
+},
+"Overwhelmed / Stressed": {
+title: "לחם לפני התשובה",
+body: "נביא אחד רץ פעם עד שלא יכול היה לרוץ יותר, התיישב מתחת לשיח במדבר, ואמר לאלוהים שזה מספיק — שזה יותר מדי, שהוא מעדיף להפסיק להתקיים מאשר להמשיך לשאת את מה שהוא נושא. זהו אחד הרגעים הכנים והבלתי מסוננים ביותר בכל הסיפור.\n\nהנה מה שקרה אחר כך: בלי הרצאה. בלי תזכורת על כל מה שהוא עוד צריך לעשות. הוא נגע בו מלאך, והיה לחם, והיו מים, ונאמר לו לאכול ולחזור לישון. פעמיים. רק אחרי שבאמת נח, מישהו שאל אותו שאלה אחת על מה שלא בסדר.\n\nהסדר הזה חשוב. המנוחה לא הייתה הפרס על כך שהכל מסודר. היא באה קודם, לפני שאמר מילה על מה ששבר אותו.\n\nאם הכל מרגיש יותר מדי עכשיו, אינך צריך לפתור את זה לפני שמותר לך לעצור. תאכל משהו. תישן אם אתה יכול. ההר, האש, התשובה — כל זה יכול לחכות לגרסה שלך שאינה פועלת על מכל ריק."
+},
+"Guilty / Ashamed": {
+title: "המעגל שלא נסגר",
+body: "אישה נגררה פעם לכיכר ציבורית, אשמה בדיוק במה שהואשמה בו, ללא הגנה להציע, מוקפת באנשים המחזיקים אבנים ומוכנים להשתמש בהן. כל עין באותו מעגל כבר החליטה מה היא.\n\nאחד אחד, המאשימים עזבו — החל מהזקן ביותר, וכלה באחרון — עד שנשארו רק היא והאיש היחיד בקהל שבאמת הייתה לו זכות לזרוק אבן. הוא לא זרק. הוא שאל לאן כולם נעלמו, אמר לה שגם הוא אינו מרשיע אותה, ואז אמר את הדבר היחיד שנותר לומר: לכי, ועזבי מאחורייך את החיים ההם.\n\nזו כל הצורה של הדבר. האשמה הייתה אמיתית — איש לא העמיד פנים אחרת. אבל המעגל שהיה אמור להיסגר עליה לא נסגר. נאמר לה ללכת קדימה, לא להישאר קפואה ברגע שבו התביישה הכי הרבה.\n\nמה שלא תישא שמרגיש בלתי נסלח, לעיתים רחוקות הוא כה סופי כפי שהוא מרגיש כשעומדים באמצעו. גם לך מותר להניח את פסק הדין בצד וללכת קדימה."
+},
+"Tired / Weary": {
+title: "ישן בתוך הסערה",
+body: "יש סיפור על סירה שנתפסה בסערה עזה כל כך שדייגים מנוסים — אנשים שבילו את כל חייהם על אותם מים — היו בטוחים שהם עומדים למות. באמצע כל הרעש הזה, איש אחד ישן. לא העמיד פנים. ישן ממש, על כרית, בירכתי הסירה.\n\nהם העירו אותו בבהלה, כמעט מאשימים אותו שלא אכפת לו אם יחיו או ימותו. הוא קם, אמר כמה מילים לרוח ולגלים, והכל נרגע. אחר כך שאל אותם למה כל כך פחדו.\n\nמה שמפספסים בסיפור הזה זה כמה עייף הוא כבר היה כדי להצליח לישון בתוך סערה כזו מלכתחילה. מה שלא עשה באותו יום כבר הוצה אותו עד כדי כך שגופו פשוט נכנע — באמצע המעבר, הסירה מיטלטלת, והוא נעלם בשינה.\n\nמנוחה איננה מותרות השמורות למים שקטים. לפעמים היא התגובה השפויה היחידה לגוף ולנפש שפשוט נתנו את כל מה שהיה להם באותו יום. אם אתה שחוק לגמרי הלילה, זו לא חולשה. זה פשוט מה שלפעמים עולה להיות אנושי — ומותר לשלם את זה בשינה."
+},
+"Hopeless / Discouraged": {
+title: "באמצע הסיפור",
+body: "יש אישה בסיפור עתיק שחזרה הביתה אחרי שנים בחוץ, לאחר שקברה את בעלה ואת שני בניה, בלי שום דבר להראות על כל זה. כשאנשים זיהו אותה חוזרת אל העיר, היא אמרה להם לא לקרוא לה עוד בשמה — קראו לי מרה, אמרה, כי זה מה שהחיים שלי הפכו להיות.\n\nהיא לא טעתה בכאב. הוא היה אמיתי, מוחלט, והיה לה כל הצידוק לקרוא לו בדיוק כמו שהוא. מה שהיא לא יכלה לדעת, עומדת באותו רגע, זה שהיא הייתה באמצע הסיפור, לא בסופו. הדבר עצמו שריקן אותה לגמרי עתיד היה להפוך לתחילתה של שושלת משפחתית שחשיבותה עלתה על כל מה שיכלה לדמיין.\n\nלחוסר תקווה יש דרך לשכנע אותך שהפרק הנוכחי הוא האחרון. לעיתים רחוקות זה נכון. זה רק מרגיש כך כי אינך יכול לראות מעבר לעמוד שאתה עומד עליו.\n\nאינך צריך להעמיד פנים שהמרירות אינה אמיתית כדי גם להאמין שאולי נותר עוד סיפור מעבר למה שאתה רואה כרגע."
+},
+"Grieving": {
+title: "עד שאמר את שמה",
+body: "אישה עמדה ובכתה מחוץ לקבר מוקדם בבוקר אחד, לאחר שכבר איבדה את מי שאהבה יותר מכל, ועכשיו גם ניצבת מול קבר ריק וללא גוף להתאבל עליו — עוד אובדן שנערם על הראשון. היא הביטה ישר באיש שעמד לידה ולא זיהתה אותו. האבל עושה את זה. הוא מערפל הכל, אפילו את הדברים שהיו אמורים להיות ברורים.\n\nאז הוא אמר מילה אחת: את שמה. רק שמה, נאמר בדרך שרק הוא ידע לומר אותו. ובאותה מילה בודדת, היא ידעה בדיוק מי עומד מולה.\n\nזה מה שהאבל צריך לפעמים — לא הסבר מסודר לְמה קרה, לא מירוץ להרגיש טוב יותר. רק להיות מוכר, באופן ספציפי, בשם, באמצע חוסר היכולת עדיין לראות ישר.\n\nאינך צריך לראות בבהירות עכשיו. אינך צריך למצוא היגיון במה שאבד. די בכך שתישאר בשקט מספיק זמן כדי לשמוע את שמך נאמר על ידי מישהו שבאמת יודע שאתה עומד שם."
+},
+"Confused / Uncertain": {
+title: "הדרך שלא ידעת שאתה הולך בה",
+body: "שני אנשים הלכו פעם דרך מאובקת ארוכה, משחזרים כל מה שהשתבש זה עתה, מנסים למצוא היגיון בסיפור שכבר לא היה הגיוני. זר הצטרף לצעדיהם ושאל על מה הם מדברים. הם סיפרו לו הכל — מבולבלים, מדוכדכים, בטוחים שהם מבינים את המצב לגמרי.\n\nהם לא זיהו אותו. לא במהלך כל ההליכה, לא בארוחה שבאה אחר כך, לא עד רגע מאוד ספציפי שבו הוא בצע את הלחם בדרך שלבסוף פקחה את עיניהם. רק אז הם הבינו מי הלך לצידם כל אותו הזמן.\n\nכך לעיתים קרובות נראה הבלבול מבפנים — אתה בטוח שאתה מבין את כל המצב, ואינך מזהה מה שבאמת הולך לצידך עד הרבה יותר מאוחר, במבט לאחור.\n\nאינך צריך להבין את זה היום. הבנה לפעמים מגיעה מאוחר, בדיעבד, מעל ארוחה משותפת, ברגע שלא תזהה עד שכבר עברת אותו. המשך ללכת בדרך. ההכרה מגיעה כשהיא מגיעה."
+},
+"Tempted / Struggling": {
+title: "ארבעים יום במדבר",
+body: "איש אחד הלך פעם ללא אוכל במשך ארבעים יום, בתוך מדבר בלבד, בנקודת התשישות הפיזית הגדולה ביותר שלו — ובדיוק אז החלו להופיע ההצעות. הפוך אבן ללחם, רק הפעם הזו, איש לא ידע. קח קיצור דרך לכוח שממילא שייך לך בצדק. הוכח משהו בהפגנה דרמטית, רק כדי להיות בטוח.\n\nבכל הצעה היה גרעין של אמת. הוא היה רעב. הכוח עתיד היה בסופו של דבר להיות שלו. ההוכחה אולי הייתה מרגיעה. הפיתוי לעיתים רחוקות מופיע כמשהו מכוער — הוא מופיע כקיצור דרך שנשמע הגיוני למשהו שאתה כבר רוצה באופן לגיטימי.\n\nהוא לא ניצח אותו בכוח רצון גרידא. בכל פעם, הוא ענה ממקום ישן ויציב יותר מהרגע שבו היה — מילים שהיו נכונות הרבה לפני שהיה עייף ורעב, ושימשיכו להיות נכונות אחר כך.\n\nמה שלא ימשוך בך עכשיו כנראה אינו מבקש ממך משהו רע. הוא כנראה מבקש שתשיג משהו אמיתי דרך קיצור דרך שיעלה לך יותר משנראה. אינך צריך להילחם בזה רק בכוח רצון. מותר לך להישען על משהו יציב יותר מכפי שאתה מרגיש כרגע."
+},
+"Peaceful / Content": {
+title: "הסערה שדרכה ישן, ואחר כך זו שהשקיט",
+body: "יש סיפור אחות למעבר הקשה בסירה הקטנה — אותו אגם, לילה אחר, אותם תלמידים לכודים במזג אוויר שלא יכלו לשלוט בו. הפעם, לעומת זאת, האיש בסירה לא ישן. הוא הלך לקראתם, ממש על פני המים, באמצע הסערה, כאילו הרוח והגלים פשוט לא היו שווים את השינוי בקצב הליכתו.\n\nהם נבהלו, חשבו שהם רואים רוח רפאים. הוא אמר את הדבר היחיד שחשוב: זה אני, אל תפחדו. פטרוס, אימפולסיבי כתמיד, ביקש ללכת גם הוא — ולכמה צעדים, הוא באמת הלך. יציב, מעל המים, עד שהביט למטה אל הגלים במקום אל האיש שלפניו. אז הוא החל לשקוע.\n\nהשלום, בסיפור הזה, מעולם לא היה קשור להיעלמות הסערה. הרוח לא שקטה עד מאוחר יותר. באותם צעדים ראשונים, השלום היה פשוט עניין של לאן היו מכוונות עיניו של פטרוס — לא אל מה שהתחולל סביבו, אלא אל מי שעמד יציב מולו.\n\nאם יש לך קצת שלום הלילה, קצת שקט באמצע דברים שעדיין עלולים להתחולל — זו לא תמימות. זה פשוט המקום שבו עיניך נחות כרגע. תן להן להישאר שם עוד קצת."
+},
+"Doubting / Questioning God": {
+title: "התאום שהיה צריך לגעת בעצמו",
+body: "אחד משנים העשר לא היה בחדר בפעם הראשונה שהאחרים ראו משהו בלתי אפשרי. כשסיפרו לו על כך אחר כך, הוא אמר בפשטות שלא יאמין — לא מכלי שני, לא רק על סמך דבריהם. הוא היה צריך לראות את הפצעים בעצמו, להניח את אצבעותיו במקום שבו היו המסמרים. שום הרגעה מעורפלת לא הייתה מספיקה.\n\nשבוע לאחר מכן, ניתנה לו בדיוק ההזדמנות הזו. ובאופן בולט, איש לא ביייש אותו על כך ששאל. הוא לא ננזף על שנזקק ליותר מסיפור שהועבר מאנשים שהוא בטח בהם. פשוט ניתן לו מה שביקש, ישירות וללא מסננים, ואז נאמר לו משהו ששווה לזכור: אשרי גם אלה שלא תהיה להם ההזדמנות הזו ובכל זאת ימצאו דרך להאמין.\n\nשווה לשבת עם זה אם אתה מהסוג שזקוק ליותר מאשר להיאמר לו סתם להאמין. ספק, כשהוא מכונה בכנות, אינו ההפך מאמונה — הוא לעיתים קרובות התהליך שהאמונה צריכה לעבור כדי להפוך למשהו אמיתי במקום משהו מושאל.\n\nמותר לך לשאול שאלות קשות ועדיין לעמוד בחדר שבוע לאחר מכן, מחכה לתשובה במקום ללכת משם."
+},
+"Hopeful / Motivated": {
+title: "הילד עם חמשת הכיכרות",
+body: "המון עצום התכנס בשעה מאוחרת ביום, רעב, בלי שום דבר מלבד שאריות ביניהם — חמש כיכרות לחם ושני דגים קטנים, שהביא ילד שכנראה לא חשב שזה ישנה הרבה מול כל כך הרבה אנשים. זה לא היה מספיק. כל מי שעשה את החשבון יכול היה לראות זאת מיד.\n\nהוא נתן את זה בכל זאת. מסר אותו כדי שיבורך, יבוקע ויחולק — ובאיזשהו אופן זה האכיל אלפים, עם סלים של שאריות בנוסף. החשבון מעולם לא השתנה. מה שהשתנה זה מה שנעשה עם הדבר הקטן והלא מספיק שבאמת הוצע, במקום שיישמר בצד כי נראה קטן מכדי לשנות משהו.\n\nמזה בדרך כלל ניזונות תקווה ומוטיבציה באמת — לא הבטחה שמה שאתה מביא מספיק כשלעצמו, אלא נכונות למסור אותו ולראות במה הוא הופך בידיים טובות יותר משהחשבון שלך היה מנבא.\n\nמה שלא תהיה בונה לקראתו, זה כנראה נראה כרגע כמו חמש כיכרות מול קהל רעב. הבא אותו בכל זאת. ההכפלה מעולם לא הייתה באמת התפקיד שלך."
+}
 }
 };
 
@@ -1217,8 +1440,7 @@ footerQuote: "\"Be still, and know that I am God.\" — Psalm 46:10",
 streakDay1: "Day 1 — glad you're here",
 loadingVerse: "Loading…",
 offlineNote: "KJV, offline",
-langToggle: "🌐 Español",
-verseErrorEs: "No se pudo cargar el versículo. Revisa tu conexión.",
+verseFetchError: "Couldn't load the verse text. Check your connection.",
 readStory: "📜 Read the story",
 hideStory: "Hide the story",
 settingsNav: "⚙️ Settings",
@@ -1265,9 +1487,8 @@ favoritesEmpty: "Aún no tienes favoritos. Toca el corazón en un versículo par
 footerQuote: "\"Estad quietos, y conoced que yo soy Dios.\" — Salmo 46:10",
 streakDay1: "Día 1 — qué bueno tenerte aquí",
 loadingVerse: "Cargando…",
-offlineNote: "RVA, sin conexión",
-langToggle: "🌐 English",
-verseErrorEs: "No se pudo cargar el versículo. Revisa tu conexión.",
+offlineNote: "RV1960, sin conexión",
+verseFetchError: "No se pudo cargar el versículo. Revisa tu conexión.",
 readStory: "📜 Leer la historia",
 hideStory: "Ocultar la historia",
 settingsNav: "⚙️ Ajustes",
@@ -1285,11 +1506,60 @@ reminderBody: "Tómate un momento tranquilo hoy. Tu versículo te espera.",
 shareSaved: "Imagen guardada — ¡compártela desde tus fotos!",
 shareSavedCopied: "¡Imagen guardada y versículo copiado al portapapeles!",
 shareUnavailable: "No se pudo crear la imagen para compartir. Intenta de nuevo."
+},
+he: {
+title: "פינת האלוהים",
+subtitle: "מקום שקט להביא אליו את הלב",
+versionLabel: "תרגום",
+voiceLabel: "קול",
+journalNav: "📖 יומן התפילה שלי",
+favoritesNav: "❤️ פסוקים מועדפים",
+moodPrompt: "איך אתה מרגיש היום?",
+continueBtn: "המשך",
+feelingPrefix: "אתה מרגיש",
+reasonPrompt: "מה הסיבה לזה, ברגע זה?",
+reasonPlaceholder: "כתוב כמה שתרצה… (רשות)",
+backBtn: "חזרה",
+giveVerseBtn: "תן לי פסוק",
+listenBtn: "האזנה",
+pauseBtn: "השהה",
+startOverBtn: "התחל מחדש",
+anotherVerseBtn: "פסוק נוסף",
+journalTitle: "יומן התפילה שלי",
+journalSubtitle: "פרטי, נשמר רק במכשיר הזה",
+journalPlaceholder: "כתוב תפילה, מחשבה, כל מה שעל ליבך…",
+saveEntryBtn: "שמור רשומה",
+journalEmpty: "עדיין לא נכתב כלום. המקום הזה הוא רק בינך לבינו.",
+favoritesTitle: "פסוקים מועדפים",
+favoritesEmpty: "עדיין אין מועדפים. הקש על הלב ליד פסוק כדי לשמור אותו כאן.",
+footerQuote: "\"הַרְפּוּ וּדְעוּ כִּי אָנֹכִי אֱלֹהִים\" — תהלים מ״ו:י",
+streakDay1: "יום 1 — טוב שאתה כאן",
+loadingVerse: "טוען…",
+offlineNote: "לא מקוון",
+verseFetchError: "לא ניתן היה לטעון את הפסוק. בדוק את החיבור שלך.",
+readStory: "📜 קרא את הסיפור",
+hideStory: "הסתר את הסיפור",
+settingsNav: "⚙️ הגדרות",
+settingsTitle: "הגדרות",
+feedbackLabel: "יש לך הצעה או מצאת תקלה?",
+feedbackLinkText: "✉️ כתוב לנו ל-sdangler99@gmail.com",
+developedBy: "פותח על ידי סטיב דנגלר",
+reminderLabel: "קבל תזכורת יומית עדינה",
+reminderNote: "עובד הכי טוב כשפינת האלוהים פתוחה בכרטיסייה, או מותקנת במכשיר שלך. התזמון המדויק עשוי להשתנות בין דפדפנים.",
+reminderUnsupported: "תזכורות אינן נתמכות בדפדפן זה.",
+reminderBlocked: "התראות חסומות. אפשר אותן בהגדרות האתר בדפדפן שלך כדי לקבל תזכורות.",
+reminderOn: "התזכורת הופעלה. נזכיר לך בסביבות השעה הזו כל יום.",
+reminderTitle: "פינת האלוהים",
+reminderBody: "קח רגע שקט היום. הפסוק שלך מחכה.",
+shareSaved: "התמונה נשמרה — שתף אותה מהתמונות שלך!",
+shareSavedCopied: "התמונה נשמרה והפסוק הועתק ללוח!",
+shareUnavailable: "לא ניתן היה ליצור את תמונת השיתוף. נסה שוב."
 }
 };
 
 const LANG_KEY = 'godscorner_lang';
-let currentLang = localStorage.getItem(LANG_KEY) === 'es' ? 'es' : 'en';
+const SUPPORTED_LANGS = ['en', 'es', 'he'];
+let currentLang = SUPPORTED_LANGS.includes(localStorage.getItem(LANG_KEY)) ? localStorage.getItem(LANG_KEY) : 'en';
 
 function t(key){
 return (UI_STRINGS[currentLang] && UI_STRINGS[currentLang][key]) || UI_STRINGS.en[key] || '';
@@ -1297,6 +1567,7 @@ return (UI_STRINGS[currentLang] && UI_STRINGS[currentLang][key]) || UI_STRINGS.e
 
 function applyLanguage(){
 document.documentElement.lang = currentLang;
+document.documentElement.dir = currentLang === 'he' ? 'rtl' : 'ltr';
 document.querySelectorAll('[data-i18n]').forEach(el => {
 el.textContent = t(el.getAttribute('data-i18n'));
 });
@@ -1305,8 +1576,10 @@ el.placeholder = t(el.getAttribute('data-i18n-placeholder'));
 });
 document.getElementById('titleEl').innerHTML = currentLang === 'es'
 ? 'El Rincón de <span class="title-strong">Dios</span>'
+: currentLang === 'he'
+? 'פינת <span class="title-strong">האלוהים</span>'
 : '<span class="title-strong">God\'s</span> Corner';
-document.getElementById('langToggleBtn').textContent = t('langToggle');
+langSelect.value = currentLang;
 renderMoodGridLabels();
 renderVersionOptions();
 renderStreak(getStreakCount());
@@ -1348,11 +1621,11 @@ verses.push(parseInt(seg, 10));
 return { book, bookNum: BOOK_NUMBERS[book], chapter, verses };
 }
 
-async function fetchSpanishVerseText(ref){
+async function fetchBollsVerseText(translationCode, ref){
 const parsed = parseVerseRef(ref);
 if(!parsed || !parsed.bookNum) throw new Error('unknown reference');
 
-const url = `https://bolls.life/get-text/RVA/${parsed.bookNum}/${parsed.chapter}/`;
+const url = `https://bolls.life/get-text/${translationCode}/${parsed.bookNum}/${parsed.chapter}/`;
 const controller = new AbortController();
 const timeoutId = setTimeout(() => controller.abort(), 6000);
 let res;
@@ -1373,16 +1646,36 @@ return wanted
 .join(' ');
 }
 
+// Hebrew has no single translation spanning the whole canon: the Tanakh (books 1-39)
+// comes from the Westminster Leningrad Codex, the New Testament (40-66) from Delitzsch's
+// 19th-century Hebrew translation. Pick whichever applies to the requested verse.
+function hebrewTranslationCodeFor(ref){
+const parsed = parseVerseRef(ref);
+return (parsed && parsed.bookNum && parsed.bookNum <= 39) ? 'WLC' : 'DHNT';
+}
+
 const VERSION_NAMES_EN = {
-web:"WEB", kjv:"KJV", webbe:"WEBBE", asv:"ASV", bbe:"BBE", darby:"Darby", ylt:"YLT"
+web:"WEB", kjv:"KJV", webbe:"WEBBE", asv:"ASV", bbe:"BBE", darby:"Darby", ylt:"YLT",
+svd:"SVD", frlsg:"LSG", lut:"LUT", ara:"ARA", cuv:"CUV", krv:"KRV", jpnict:"JPNICT"
 };
 const VERSION_NAMES_ES = {
-rva:"RVA"
+rv1960:"RV1960"
+};
+const VERSION_NAMES_HE = {
+he_bible:"WLC / DHNT"
 };
 function currentVersionNames(){
-return currentLang === 'es' ? VERSION_NAMES_ES : VERSION_NAMES_EN;
+if(currentLang === 'es') return VERSION_NAMES_ES;
+if(currentLang === 'he') return VERSION_NAMES_HE;
+return VERSION_NAMES_EN;
 }
 const VERSION_NAMES = new Proxy({}, { get: (_, key) => currentVersionNames()[key] });
+
+// Codes fetched from bolls.life rather than bible-api.com, keyed by the versionSelect value.
+const BOLLS_CODE_MAP = {
+svd:'SVD', frlsg:'FRLSG', lut:'LUT', ara:'ARA', cuv:'CUV', krv:'KRV', jpnict:'JPNICT'
+};
+const RTL_VERSION_CODES = new Set(['svd']);
 
 const VERSION_OPTIONS_EN = [
 { value:'web', label:'World English Bible (WEB)' },
@@ -1391,17 +1684,33 @@ const VERSION_OPTIONS_EN = [
 { value:'asv', label:'American Standard Version (ASV)' },
 { value:'bbe', label:'Bible in Basic English (BBE)' },
 { value:'darby', label:'Darby Translation' },
-{ value:'ylt', label:"Young's Literal Translation (YLT)" }
+{ value:'ylt', label:"Young's Literal Translation (YLT)" },
+{ value:'svd', label:'Arabic — Smith & Van Dyke (SVD)' },
+{ value:'frlsg', label:'French — Louis Segond (LSG)' },
+{ value:'lut', label:'German — Luther Bible (LUT)' },
+{ value:'ara', label:'Portuguese — Almeida Revista e Atualizada (ARA)' },
+{ value:'cuv', label:'Chinese — Union Version (CUV)' },
+{ value:'krv', label:'Korean — Korean Revised Version (KRV)' },
+{ value:'jpnict', label:'Japanese — New Interconfessional Translation (JPNICT)' }
 ];
 const VERSION_OPTIONS_ES = [
-{ value:'rva', label:'Reina-Valera Antigua (RVA)' }
+{ value:'rv1960', label:'Reina-Valera 1960 (RV1960)' }
+];
+const VERSION_OPTIONS_HE = [
+{ value:'he_bible', label:'תנ״ך (WLC) והברית החדשה (DHNT)' }
 ];
 const VERSION_KEY = 'godscorner_version';
 
 const versionSelect = document.getElementById('versionSelect');
 
+function currentVersionOptions(){
+if(currentLang === 'es') return VERSION_OPTIONS_ES;
+if(currentLang === 'he') return VERSION_OPTIONS_HE;
+return VERSION_OPTIONS_EN;
+}
+
 function renderVersionOptions(){
-const opts = currentLang === 'es' ? VERSION_OPTIONS_ES : VERSION_OPTIONS_EN;
+const opts = currentVersionOptions();
 const savedVersion = localStorage.getItem(VERSION_KEY);
 versionSelect.innerHTML = '';
 opts.forEach(o => {
@@ -1445,9 +1754,17 @@ if(!count || count < 1){
 streakNote.textContent = '';
 return;
 }
-streakNote.textContent = count === 1
-? t('streakDay1')
-: (currentLang === 'es' ? `${count} días seguidos` : `${count} days in a row`);
+if(count === 1){
+streakNote.textContent = t('streakDay1');
+return;
+}
+if(currentLang === 'es'){
+streakNote.textContent = `${count} días seguidos`;
+} else if(currentLang === 'he'){
+streakNote.textContent = count === 2 ? 'יומיים ברצף' : `${count} ימים ברצף`;
+} else {
+streakNote.textContent = `${count} days in a row`;
+}
 }
 
 function getStreakCount(){
@@ -1584,9 +1901,10 @@ moodGrid.appendChild(btn);
 });
 
 function renderMoodGridLabels(){
+const bank = MOOD_TRANSLATIONS[currentLang];
 document.querySelectorAll('.mood-btn').forEach(btn => {
 const mood = btn.dataset.mood;
-btn.textContent = currentLang === 'es' ? (MOOD_ES[mood] || mood) : mood;
+btn.textContent = (bank && bank[mood]) || mood;
 });
 }
 
@@ -1638,7 +1956,7 @@ function populateVoices(){
 availableVoices = window.speechSynthesis.getVoices();
 if(!availableVoices.length) return;
 
-const langPrefix = currentLang === 'es' ? 'es' : 'en';
+const langPrefix = SUPPORTED_LANGS.includes(currentLang) ? currentLang : 'en';
 const matchedVoices = availableVoices.filter(v => v.lang && v.lang.toLowerCase().startsWith(langPrefix));
 const list = matchedVoices.length ? matchedVoices : availableVoices;
 
@@ -1688,7 +2006,7 @@ toRead += ` ${storyTitleEl.textContent}. ${storyBodyEl.textContent}`;
 }
 const utterance = new SpeechSynthesisUtterance(toRead);
 utterance.rate = 0.92;
-utterance.lang = currentLang === 'es' ? 'es-ES' : 'en-US';
+utterance.lang = { es: 'es-ES', he: 'he-IL' }[currentLang] || 'en-US';
 const chosenVoiceURI = voiceSelect.value;
 if(chosenVoiceURI){
 const chosen = availableVoices.find(v => v.voiceURI === chosenVoiceURI);
@@ -1718,33 +2036,45 @@ do { idx = Math.floor(Math.random() * list.length); } while (idx === lastVerseIn
 lastVerseIndex = idx;
 const v = list[idx];
 const version = versionSelect.value;
-const versionLabel = VERSION_NAMES[version] || version.toUpperCase();
 const myToken = ++fetchToken;
-const reflectionText = currentLang === 'es'
-? ((REFLECTIONS_ES[selectedMood] && REFLECTIONS_ES[selectedMood][idx]) || v.reflection)
-: v.reflection;
+const reflectionBank = REFLECTIONS_BY_LANG[currentLang];
+const reflectionText = (reflectionBank && reflectionBank[selectedMood] && reflectionBank[selectedMood][idx]) || v.reflection;
 currentVerseMeta = { ref: v.ref, mood: selectedMood, reflection: reflectionText };
 
-document.getElementById('verseRef').textContent = `${v.ref} (${versionLabel})`;
-document.getElementById('verseText').textContent = t('loadingVerse');
+const hebrewCode = currentLang === 'he' ? hebrewTranslationCodeFor(v.ref) : null;
+const bollsCode = currentLang === 'es' ? 'RV1960' : (hebrewCode || BOLLS_CODE_MAP[version] || null);
+const versionLabel = hebrewCode || VERSION_NAMES[version] || version.toUpperCase();
+const isRtl = currentLang === 'he' || RTL_VERSION_CODES.has(version);
+
+const verseTextEl = document.getElementById('verseText');
+const verseRefEl = document.getElementById('verseRef');
+verseTextEl.classList.toggle('script-rtl', isRtl);
+verseRefEl.classList.toggle('script-rtl', isRtl);
+verseTextEl.classList.remove('script-hebrew', 'script-arabic');
+if(currentLang === 'he') verseTextEl.classList.add('script-hebrew');
+else if(RTL_VERSION_CODES.has(version)) verseTextEl.classList.add('script-arabic');
+verseTextEl.dir = isRtl ? 'rtl' : 'ltr';
+
+verseRefEl.textContent = `${v.ref} (${versionLabel})`;
+verseTextEl.textContent = t('loadingVerse');
 document.getElementById('verseReflection').textContent = reflectionText;
 updateFavBtnState();
 updateStoryPanel();
 
 try {
-const text = currentLang === 'es'
-? await fetchSpanishVerseText(v.ref)
+const text = bollsCode
+? await fetchBollsVerseText(bollsCode, v.ref)
 : await fetchVerseText(v.ref, version);
 if(myToken !== fetchToken) return;
-document.getElementById('verseText').textContent = text;
+verseTextEl.textContent = text;
 } catch(err) {
 if(myToken !== fetchToken) return;
-if(currentLang === 'es'){
-document.getElementById('verseText').textContent = t('verseErrorEs');
+if(bollsCode){
+verseTextEl.textContent = t('verseFetchError');
 } else {
-document.getElementById('verseText').textContent = v.text;
+verseTextEl.textContent = v.text;
+verseRefEl.textContent = `${v.ref} (${t('offlineNote')})`;
 }
-document.getElementById('verseRef').textContent = `${v.ref} (${t('offlineNote')})`;
 }
 }
 
@@ -2270,8 +2600,9 @@ document.getElementById('reasonInput').value = '';
 showStep('step-mood');
 });
 
-document.getElementById('langToggleBtn').addEventListener('click', () => {
-currentLang = currentLang === 'es' ? 'en' : 'es';
+const langSelect = document.getElementById('langSelect');
+langSelect.addEventListener('change', () => {
+currentLang = langSelect.value;
 localStorage.setItem(LANG_KEY, currentLang);
 stopSpeech();
 if(speechSupported) populateVoices();
