@@ -27,7 +27,7 @@
 html,body{
 margin:0;
 min-height:100%;
-background:var(--navy-deep);
+background:#3a4d74;
 }
 body{
 font-family:'EB Garamond', serif;
@@ -45,19 +45,19 @@ position:fixed;
 inset:0;
 z-index:0;
 background:
-radial-gradient(ellipse 900px 500px at 50% -5%, rgba(201,162,75,0.16), transparent 60%),
-radial-gradient(ellipse 700px 700px at 85% 85%, rgba(110,42,61,0.18), transparent 60%),
-radial-gradient(ellipse 700px 700px at 5% 75%, rgba(21,36,71,0.5), transparent 60%),
-var(--navy-deep);
+radial-gradient(ellipse 700px 420px at 50% 0%, rgba(255,238,196,0.22), transparent 65%),
+linear-gradient(180deg, #16233f 0%, #3a4d74 30%, #7f8fae 55%, #cbb897 78%, #e7cf9e 100%);
 }
 body::after{
 content:"";
 position:fixed;
-inset:0;
+inset:-40px;
 z-index:0;
-opacity:0.5;
-background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cg fill='none' stroke='%23c9a24b' stroke-opacity='0.05' stroke-width='1'%3E%3Ccircle cx='60' cy='30' r='24'/%3E%3Ccircle cx='60' cy='90' r='24'/%3E%3Ccircle cx='30' cy='60' r='24'/%3E%3Ccircle cx='90' cy='60' r='24'/%3E%3Ccircle cx='60' cy='60' r='10'/%3E%3C/g%3E%3C/svg%3E");
-background-size:120px 120px;
+opacity:0.85;
+mix-blend-mode:screen;
+filter:blur(4px);
+background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='900' height='900'%3E%3Cfilter id='c'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.008 0.016' numOctaves='6' seed='5' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 22 -13'/%3E%3C/filter%3E%3Crect width='900' height='900' filter='url(%23c)'/%3E%3C/svg%3E");
+background-size:900px 900px;
 }
 .stage{
 position:relative;
@@ -466,6 +466,95 @@ background:rgba(110,42,61,0.14);
 .verse-actions{
 text-align:center;
 }
+.share-btn{
+display:inline-flex;
+align-items:center;
+justify-content:center;
+background:transparent;
+border:1px solid var(--line);
+color:var(--muted);
+width:38px;
+height:38px;
+border-radius:50%;
+cursor:pointer;
+margin:0 8px 22px;
+vertical-align:middle;
+}
+.share-btn:hover{border-color:var(--gold);color:var(--gold-soft);}
+.share-btn:disabled{opacity:0.6;cursor:wait;}
+.share-btn svg{width:16px;height:16px;}
+.share-status{
+color:var(--gold-soft);
+font-size:0.85rem;
+font-style:italic;
+text-align:center;
+margin:-14px 0 18px;
+min-height:1.1em;
+}
+.reminder-row{
+display:flex;
+align-items:center;
+justify-content:center;
+gap:14px;
+flex-wrap:wrap;
+}
+.switch{
+position:relative;
+display:inline-block;
+width:44px;
+height:26px;
+flex:none;
+}
+.switch input{opacity:0;width:0;height:0;}
+.switch-slider{
+position:absolute;
+inset:0;
+background:rgba(147,160,196,0.25);
+border:1px solid var(--line);
+border-radius:14px;
+cursor:pointer;
+transition:background 0.2s ease;
+}
+.switch-slider::before{
+content:"";
+position:absolute;
+width:18px;
+height:18px;
+left:3px;
+top:2px;
+background:var(--parchment);
+border-radius:50%;
+transition:transform 0.2s ease;
+}
+.switch input:checked + .switch-slider{
+background:linear-gradient(180deg, var(--gold-soft), var(--gold));
+border-color:var(--gold);
+}
+.switch input:checked + .switch-slider::before{transform:translateX(18px);}
+.switch input:disabled + .switch-slider{opacity:0.4;cursor:not-allowed;}
+input[type="time"]{
+background:rgba(0,0,0,0.18);
+border:1px solid var(--line);
+color:var(--gold-soft);
+font-family:'EB Garamond', serif;
+font-size:0.95rem;
+padding:6px 10px;
+border-radius:8px;
+color-scheme:dark;
+}
+input[type="time"]:focus{outline:none;border-color:var(--gold);}
+input[type="time"]:disabled{opacity:0.4;}
+.reminder-note{
+font-size:0.85rem !important;
+margin-top:14px !important;
+}
+.reminder-status{
+color:var(--gold-soft);
+font-size:0.85rem;
+font-style:italic;
+min-height:1.1em;
+margin:10px 0 0;
+}
 .fav-entry{
 position:relative;
 background:rgba(0,0,0,0.16);
@@ -644,7 +733,11 @@ h1{font-size:2.1rem;}
 <button class="fav-btn" id="favBtn" type="button" aria-label="Save to favorites">
 <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-6.7-4.35-9.3-8.1C1 10.2 1.6 6.9 4.3 5.4c2.1-1.15 4.6-.6 6 1.2l1.7 2.2 1.7-2.2c1.4-1.8 3.9-2.35 6-1.2 2.7 1.5 3.3 4.8 1.6 7.5C18.7 16.65 12 21 12 21z"/></svg>
 </button>
+<button class="share-btn" id="shareBtn" type="button" aria-label="Share this verse">
+<svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L7.04 9.81C6.5 9.31 5.79 9 5 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>
+</button>
 </div>
+<p class="share-status" id="shareStatus"></p>
 <div class="divider"></div>
 <p class="reflection" id="verseReflection"></p>
 <button class="story-toggle" id="storyToggleBtn" type="button" style="display:none;"></button>
@@ -685,6 +778,18 @@ h1{font-size:2.1rem;}
 <p class="prompt" data-i18n="settingsTitle">Settings</p>
 <div class="btn-row" style="margin-top:0;">
 <button class="secondary" id="settingsBackBtn" data-i18n="backBtn">Back</button>
+</div>
+<div class="settings-block">
+<p data-i18n="reminderLabel">Get a gentle daily reminder</p>
+<div class="reminder-row">
+<label class="switch">
+<input type="checkbox" id="reminderToggle">
+<span class="switch-slider"></span>
+</label>
+<input type="time" id="reminderTimeInput" value="09:00">
+</div>
+<p class="reminder-note" data-i18n="reminderNote">Works best while God's Corner is open in a tab, or installed on your device. Exact timing may vary by browser.</p>
+<p class="reminder-status" id="reminderStatus"></p>
 </div>
 <div class="settings-block">
 <p data-i18n="feedbackLabel">Have a suggestion or found a bug?</p>
@@ -1120,7 +1225,17 @@ settingsNav: "⚙️ Settings",
 settingsTitle: "Settings",
 feedbackLabel: "Have a suggestion or found a bug?",
 feedbackLinkText: "✉️ Email us at sdangler99@gmail.com",
-developedBy: "Developed by Steve Dangler"
+developedBy: "Developed by Steve Dangler",
+reminderLabel: "Get a gentle daily reminder",
+reminderNote: "Works best while God's Corner is open in a tab, or installed on your device. Exact timing may vary by browser.",
+reminderUnsupported: "Reminders aren't supported in this browser.",
+reminderBlocked: "Notifications are blocked. Allow them in your browser's site settings to enable reminders.",
+reminderOn: "Reminder set. We'll nudge you around this time each day.",
+reminderTitle: "God's Corner",
+reminderBody: "Take a quiet moment today. Your verse is waiting.",
+shareSaved: "Image saved — share it from your photos!",
+shareSavedCopied: "Image saved and verse copied to your clipboard!",
+shareUnavailable: "Couldn't create the share image. Please try again."
 },
 es: {
 title: "El Rincón de Dios",
@@ -1159,7 +1274,17 @@ settingsNav: "⚙️ Ajustes",
 settingsTitle: "Ajustes",
 feedbackLabel: "¿Tienes una sugerencia o encontraste un error?",
 feedbackLinkText: "✉️ Escríbenos a sdangler99@gmail.com",
-developedBy: "Desarrollado por Steve Dangler"
+developedBy: "Desarrollado por Steve Dangler",
+reminderLabel: "Recibe un recordatorio diario",
+reminderNote: "Funciona mejor mientras El Rincón de Dios esté abierto en una pestaña, o instalado en tu dispositivo. El horario exacto puede variar según el navegador.",
+reminderUnsupported: "Los recordatorios no son compatibles con este navegador.",
+reminderBlocked: "Las notificaciones están bloqueadas. Actívalas en la configuración del sitio de tu navegador para recibir recordatorios.",
+reminderOn: "Recordatorio activado. Te avisaremos alrededor de esta hora cada día.",
+reminderTitle: "El Rincón de Dios",
+reminderBody: "Tómate un momento tranquilo hoy. Tu versículo te espera.",
+shareSaved: "Imagen guardada — ¡compártela desde tus fotos!",
+shareSavedCopied: "¡Imagen guardada y versículo copiado al portapapeles!",
+shareUnavailable: "No se pudo crear la imagen para compartir. Intenta de nuevo."
 }
 };
 
@@ -1188,6 +1313,7 @@ renderStreak(getStreakCount());
 if(document.getElementById('step-journal').classList.contains('active')) renderJournalList();
 if(document.getElementById('step-favorites').classList.contains('active')) renderFavoritesList();
 if(document.getElementById('step-verse').classList.contains('active')) updateStoryPanel();
+updateReminderStatus();
 }
 
 // Standard 66-book order used by most free Bible APIs (bolls.life, etc.)
@@ -1706,6 +1832,173 @@ saveFavorites(favs);
 updateFavBtnState();
 });
 
+function wrapCanvasText(ctx, text, maxWidth){
+const words = text.split(' ');
+const lines = [];
+let line = '';
+words.forEach(word => {
+const test = line ? `${line} ${word}` : word;
+if(ctx.measureText(test).width > maxWidth && line){
+lines.push(line);
+line = word;
+} else {
+line = test;
+}
+});
+if(line) lines.push(line);
+return lines;
+}
+
+async function buildShareCanvas(refText, verseText, reflectionText){
+if(document.fonts && document.fonts.ready){
+try { await document.fonts.ready; } catch(e) {}
+}
+
+const W = 1080;
+const measure = document.createElement('canvas').getContext('2d');
+
+measure.font = '500 58px "Cormorant Garamond", Georgia, serif';
+const verseLines = wrapCanvasText(measure, `“${verseText}”`, W - 220);
+
+measure.font = 'italic 400 36px "EB Garamond", Georgia, serif';
+let reflectionLines = reflectionText ? wrapCanvasText(measure, reflectionText, W - 260) : [];
+if(reflectionLines.length > 6){
+reflectionLines = reflectionLines.slice(0, 6);
+reflectionLines[5] = reflectionLines[5].replace(/\s+$/, '') + '…';
+}
+
+const refY = 250;
+const verseStartY = 360;
+const verseLineHeight = 74;
+const dividerGap = 80;
+const reflectionLineHeight = 50;
+const footerGap = 120;
+
+const contentBottom = verseStartY + verseLines.length * verseLineHeight
++ dividerGap
++ reflectionLines.length * reflectionLineHeight;
+const H = Math.max(1080, Math.round(contentBottom + footerGap));
+
+const canvas = document.createElement('canvas');
+canvas.width = W;
+canvas.height = H;
+const ctx = canvas.getContext('2d');
+
+const bgGrad = ctx.createLinearGradient(0, 0, 0, H);
+bgGrad.addColorStop(0, '#152447');
+bgGrad.addColorStop(1, '#0a1428');
+ctx.fillStyle = bgGrad;
+ctx.fillRect(0, 0, W, H);
+
+const glow = ctx.createRadialGradient(W / 2, H * 0.16, 40, W / 2, H * 0.16, W * 0.75);
+glow.addColorStop(0, 'rgba(201,162,75,0.22)');
+glow.addColorStop(1, 'rgba(201,162,75,0)');
+ctx.fillStyle = glow;
+ctx.fillRect(0, 0, W, H);
+
+ctx.strokeStyle = 'rgba(201,162,75,0.45)';
+ctx.lineWidth = 3;
+ctx.strokeRect(36, 36, W - 72, H - 72);
+ctx.strokeStyle = 'rgba(201,162,75,0.2)';
+ctx.lineWidth = 1;
+ctx.strokeRect(52, 52, W - 104, H - 104);
+
+ctx.strokeStyle = 'rgba(201,162,75,0.55)';
+ctx.lineWidth = 2;
+ctx.beginPath();
+ctx.arc(W / 2, 150, 34, 0, Math.PI * 2);
+ctx.stroke();
+ctx.beginPath();
+ctx.moveTo(W / 2, 128); ctx.lineTo(W / 2, 172);
+ctx.moveTo(W / 2 - 20, 150); ctx.lineTo(W / 2 + 20, 150);
+ctx.stroke();
+
+ctx.textAlign = 'center';
+ctx.fillStyle = '#e0c584';
+ctx.font = 'italic 500 40px "Cormorant Garamond", Georgia, serif';
+ctx.fillText(refText, W / 2, refY);
+
+let y = verseStartY;
+ctx.fillStyle = '#ede3ce';
+ctx.font = '500 58px "Cormorant Garamond", Georgia, serif';
+verseLines.forEach(line => { ctx.fillText(line, W / 2, y); y += verseLineHeight; });
+
+y += 20;
+ctx.strokeStyle = 'rgba(201,162,75,0.4)';
+ctx.lineWidth = 2;
+ctx.beginPath();
+ctx.moveTo(W / 2 - 60, y); ctx.lineTo(W / 2 + 60, y);
+ctx.stroke();
+y += 60;
+
+ctx.fillStyle = '#93a0c4';
+ctx.font = 'italic 400 36px "EB Garamond", Georgia, serif';
+reflectionLines.forEach(line => { ctx.fillText(line, W / 2, y); y += reflectionLineHeight; });
+
+ctx.fillStyle = '#c9a24b';
+ctx.font = 'italic 600 34px "Cormorant Garamond", Georgia, serif';
+ctx.fillText(currentLang === 'es' ? 'El Rincón de Dios' : "God's Corner", W / 2, H - 90);
+
+return canvas;
+}
+
+function canvasToBlob(canvas){
+return new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+}
+
+function downloadCanvasImage(blob){
+const url = URL.createObjectURL(blob);
+const a = document.createElement('a');
+a.href = url;
+a.download = 'gods-corner-verse.png';
+document.body.appendChild(a);
+a.click();
+a.remove();
+setTimeout(() => URL.revokeObjectURL(url), 4000);
+}
+
+function flashShareStatus(msg){
+const el = document.getElementById('shareStatus');
+el.textContent = msg;
+clearTimeout(flashShareStatus._t);
+flashShareStatus._t = setTimeout(() => { el.textContent = ''; }, 4000);
+}
+
+const shareBtn = document.getElementById('shareBtn');
+shareBtn.addEventListener('click', async () => {
+if(!currentVerseMeta) return;
+shareBtn.disabled = true;
+try {
+const refText = document.getElementById('verseRef').textContent;
+const verseText = document.getElementById('verseText').textContent;
+const reflectionText = document.getElementById('verseReflection').textContent;
+const canvas = await buildShareCanvas(refText, verseText, reflectionText);
+const blob = await canvasToBlob(canvas);
+if(!blob) throw new Error('no blob');
+const file = new File([blob], 'gods-corner-verse.png', { type: 'image/png' });
+const shareText = `${refText}\n\n${verseText}`;
+const titleText = currentLang === 'es' ? 'El Rincón de Dios' : "God's Corner";
+
+if(navigator.canShare && navigator.canShare({ files: [file] })){
+await navigator.share({ files: [file], title: titleText, text: shareText });
+} else {
+downloadCanvasImage(blob);
+try {
+await navigator.clipboard.writeText(shareText);
+flashShareStatus(t('shareSavedCopied'));
+} catch(clipErr) {
+flashShareStatus(t('shareSaved'));
+}
+}
+} catch(err) {
+if(!err || err.name !== 'AbortError'){
+flashShareStatus(t('shareUnavailable'));
+}
+} finally {
+shareBtn.disabled = false;
+}
+});
+
 function speakFavoriteEntry(entry, btnEl){
 if(!speechSupported) return;
 const wasPlaying = btnEl.classList.contains('playing');
@@ -1811,6 +2104,152 @@ document.getElementById('settingsBackBtn').addEventListener('click', () => {
 showStep('step-mood');
 });
 
+const REMINDER_KEY = 'godscorner_reminder';
+const reminderToggle = document.getElementById('reminderToggle');
+const reminderTimeInput = document.getElementById('reminderTimeInput');
+const reminderStatusEl = document.getElementById('reminderStatus');
+let reminderTimeoutId = null;
+
+function loadReminderSettings(){
+try {
+const saved = JSON.parse(localStorage.getItem(REMINDER_KEY) || 'null');
+if(saved && typeof saved.hour === 'number' && typeof saved.minute === 'number'){
+return { enabled: !!saved.enabled, hour: saved.hour, minute: saved.minute };
+}
+} catch(e) {}
+return { enabled: false, hour: 9, minute: 0 };
+}
+
+function saveReminderSettings(settings){
+localStorage.setItem(REMINDER_KEY, JSON.stringify(settings));
+}
+
+function pad2(n){ return String(n).padStart(2, '0'); }
+
+function msUntilNextReminder(hour, minute){
+const now = new Date();
+const next = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hour, minute, 0, 0);
+if(next <= now) next.setDate(next.getDate() + 1);
+return next - now;
+}
+
+async function showReminderNotification(){
+const title = t('reminderTitle');
+const body = t('reminderBody');
+if('serviceWorker' in navigator){
+try {
+const reg = await navigator.serviceWorker.ready;
+await reg.showNotification(title, { body, icon: 'icon-192.png', badge: 'icon-192.png', tag: 'daily-verse-reminder' });
+return;
+} catch(e) {}
+}
+if('Notification' in window && Notification.permission === 'granted'){
+new Notification(title, { body, icon: 'icon-192.png' });
+}
+}
+
+function clearReminderTimer(){
+if(reminderTimeoutId){ clearTimeout(reminderTimeoutId); reminderTimeoutId = null; }
+}
+
+function scheduleForegroundReminder(){
+clearReminderTimer();
+const settings = loadReminderSettings();
+if(!settings.enabled || !('Notification' in window) || Notification.permission !== 'granted') return;
+const delay = msUntilNextReminder(settings.hour, settings.minute);
+reminderTimeoutId = setTimeout(async () => {
+await showReminderNotification();
+scheduleForegroundReminder();
+}, delay);
+}
+
+async function registerPeriodicReminder(){
+if(!('serviceWorker' in navigator)) return;
+try {
+const reg = await navigator.serviceWorker.ready;
+if('periodicSync' in reg && 'permissions' in navigator){
+const status = await navigator.permissions.query({ name: 'periodic-background-sync' });
+if(status.state === 'granted'){
+await reg.periodicSync.register('daily-verse-reminder', { minInterval: 20 * 60 * 60 * 1000 });
+}
+}
+} catch(e) {}
+}
+
+async function unregisterPeriodicReminder(){
+if(!('serviceWorker' in navigator)) return;
+try {
+const reg = await navigator.serviceWorker.ready;
+if(reg.periodicSync){
+await reg.periodicSync.unregister('daily-verse-reminder');
+}
+} catch(e) {}
+}
+
+function updateReminderStatus(){
+if(!('Notification' in window)){
+reminderStatusEl.textContent = t('reminderUnsupported');
+reminderToggle.disabled = true;
+reminderTimeInput.disabled = true;
+return;
+}
+if(Notification.permission === 'denied'){
+reminderStatusEl.textContent = t('reminderBlocked');
+} else if(reminderToggle.checked){
+reminderStatusEl.textContent = t('reminderOn');
+} else {
+reminderStatusEl.textContent = '';
+}
+}
+
+function initReminderUI(){
+const settings = loadReminderSettings();
+reminderTimeInput.value = `${pad2(settings.hour)}:${pad2(settings.minute)}`;
+const isActive = settings.enabled && 'Notification' in window && Notification.permission === 'granted';
+reminderToggle.checked = isActive;
+if(isActive){
+scheduleForegroundReminder();
+registerPeriodicReminder();
+}
+updateReminderStatus();
+}
+
+reminderToggle.addEventListener('change', async () => {
+if(reminderToggle.checked){
+if(!('Notification' in window)){
+reminderToggle.checked = false;
+updateReminderStatus();
+return;
+}
+let permission = Notification.permission;
+if(permission === 'default'){
+permission = await Notification.requestPermission();
+}
+if(permission !== 'granted'){
+reminderToggle.checked = false;
+updateReminderStatus();
+return;
+}
+const [h, m] = reminderTimeInput.value.split(':').map(Number);
+saveReminderSettings({ enabled: true, hour: h, minute: m });
+scheduleForegroundReminder();
+registerPeriodicReminder();
+} else {
+const settings = loadReminderSettings();
+saveReminderSettings({ ...settings, enabled: false });
+clearReminderTimer();
+unregisterPeriodicReminder();
+}
+updateReminderStatus();
+});
+
+reminderTimeInput.addEventListener('change', () => {
+const settings = loadReminderSettings();
+const [h, m] = reminderTimeInput.value.split(':').map(Number);
+saveReminderSettings({ ...settings, hour: h, minute: m });
+if(settings.enabled) scheduleForegroundReminder();
+});
+
 document.getElementById('revealBtn').addEventListener('click', () => {
 recordCheckIn();
 showStep('step-verse');
@@ -1839,6 +2278,7 @@ if(speechSupported) populateVoices();
 applyLanguage();
 });
 
+initReminderUI();
 applyLanguage();
 </script>
 <script>
